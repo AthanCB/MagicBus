@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div >
+    <div class="text-center">
+        <h1>Αθήνα, Θεσσαλονίκη ή Ρόδο;</h1>
+        <form class="mb_form">
+            <div class="form-group">
+                <label for="formGroupExampleInput">Όνομα</label>
+                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Συμπλήρωσε το όνομα σου">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Επίθετο</label>
+                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Συμπλήρωσε το επίθετο σου">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Ημερομηνία</label>
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" class="form-control">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" class="form-control btn-primary" value="Κλέισε Θέση!"></input>
+        </form>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>
