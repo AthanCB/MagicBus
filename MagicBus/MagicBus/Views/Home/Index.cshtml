@@ -2,25 +2,36 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div >
+<link rel="stylesheet" type="text/css" href="~/css/datepicker.css" />
+<link href="https://cdn.jsdelivr.net/bootstrap.timepicker/0.2.6/css/bootstrap-timepicker.min.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<div>
     <div class="text-center">
         <h1>Αθήνα, Θεσσαλονίκη ή Ρόδο;</h1>
+        <h1 class="main_h2">Έχεις ξεχάσει που ακριβώς θέλεις να πας;</h1>
+        <br />
+
         <form class="mb_form">
             <div class="form-group">
-                <label for="formGroupExampleInput">Όνομα</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Συμπλήρωσε το όνομα σου">
-            </div>
-            <div class="form-group">
-                <label for="formGroupExampleInput2">Επίθετο</label>
-                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Συμπλήρωσε το επίθετο σου">
+                <h4>Συμπλήρωσε την μέρα και ώρα που πετάς και ασε τα υπόλοιπα στο MagicBus!</h4>
+                <hr style="border-color:slategray;" />
             </div>
             <div class="form-group">
                 <label for="formGroupExampleInput2">Ημερομηνία</label>
-                <div class="input-group date" data-provide="datepicker">
-                    <input type="text" class="form-control">
-                    <div class="input-group-addon">
-                        <span class="glyphicon glyphicon-th"></span>
+                <div class="form-group">
+                    <div class='input-group date'>
+                        <input type="text" class="form-control" value="09-12-2018" data-date-format="dd-mm-yyyy" id="datepicker">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
                     </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Ώρα</label>
+                <div class="input-group bootstrap-timepicker timepicker">
+                    <input id="timepicker1" type="text" class="form-control input-small">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
             </div>
             <input type="submit" class="form-control btn-primary" value="Κλέισε Θέση!"></input>
@@ -28,6 +39,12 @@
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript">
-    $('.datepicker').datepicker();
+<script type="text/javascript" src="~/js/bootstrap-datepicker.js" charset="UTF-8"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap.timepicker/0.2.6/js/bootstrap-timepicker.min.js"></script>
+
+<script>
+    $('#datepicker').datepicker();
+    $('#timepicker1').timepicker({
+        showInputs: false
+    });
 </script>

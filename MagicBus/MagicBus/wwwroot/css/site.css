@@ -50,8 +50,38 @@ h1 {
     color: white;
 }
 
+.main_h2{
+    color: white;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+}
 .mb_form {
     background-color: rgba(255,255,255,0.8);
     padding: 10px;
     border-radius: 10px;
+}
+
+.btn-primary{
+    background-color:green;
+}
+.btn-primary:focus,
+.btn-primary.focus {
+    color: #fff;
+    background-color: forestgreen;
+    border-color: #122b40;
+
+}
+.btn-primary:hover,
+.btn-primary.hover {
+    color: #fff;
+    background-color: forestgreen;
+    border-color: #122b40;
+
 }
