@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MagicBus.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IRepository<MagicTrip> _magicTrips;
@@ -19,12 +20,13 @@ namespace MagicBus.Controllers
             _magicTrips = mt;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
 
-     
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult Index([FromForm]ViewMagicTrip obj)
         {
@@ -37,7 +39,7 @@ namespace MagicBus.Controllers
             return View();
         }
 
-       
+        
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -51,7 +53,6 @@ namespace MagicBus.Controllers
 
             return View();
         }
-
         public IActionResult Privacy()
         {
             return View();

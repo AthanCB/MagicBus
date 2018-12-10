@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -8,12 +9,15 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MagicBus.Common.Models;
 using MagicBus.DataAccess.Repositories.Interfaces;
-using MagicBus.Helpers;
-using MagicBus.Models.DTOs;
-using MagicBus.Services.Interfaces;
+using MagicBus.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 
 namespace MagicBus.Controllers
@@ -21,18 +25,14 @@ namespace MagicBus.Controllers
     [Authorize]
     public class UsersController : Controller
     {
-        private readonly IUserService _userService;
-        private IMapper _mapper;
-        private readonly AppSettings _appSettings;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UsersController(
-            IUserService userService,
-            IMapper mapper,
-            IOptions<AppSettings> appSettings)
+        public UsersController(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
-            _userService = userService;
-            _mapper = mapper;
-            _appSettings = appSettings.Value;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
         [AllowAnonymous]
         public IActionResult Login()
@@ -43,37 +43,24 @@ namespace MagicBus.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromForm]UserDto userParam)
+        public async Task<IActionResult> Login([FromForm]LoginViewModel model)
         {
-            var user =   _userService.Authenticate(userParam.Username, userParam.Password);
-
-            if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            if (ModelState.IsValid)
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            // return basic user info (without password) and token to store client side
-            return Ok(new
-            {
-                Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Token = tokenString
-            });
+                    //TODO: success
+                    return Ok();
+                }
+            }
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            //TODO: fail
+            // If we got this far, something failed
+            return Unauthorized();
         }
+
+     
 
         [AllowAnonymous]
         public IActionResult Register()
@@ -81,24 +68,26 @@ namespace MagicBus.Controllers
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
-        public IActionResult Register([FromForm]UserDto userDto)
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            // map dto to entity
-            var user = _mapper.Map<User>(userDto);
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email }; // User = new User() TODO: Fill user details
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                   
+                    //TODO: add verification code send
 
-            try
-            {
-                // save 
-                _userService.Create(user, userDto.Password);
-                return Ok();
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return Ok();
+                }
             }
-            catch (AppException ex)
-            {
-                // return error message if there was an exception
-                return BadRequest(new { message = ex.Message });
-            }
+
+            // If we got this far, something failed
+            return Unauthorized();
         }
 
 
