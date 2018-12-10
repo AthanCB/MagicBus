@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using MagicBus.Common.Models;
@@ -20,6 +22,16 @@ namespace MagicBus.DataAccess.Repositories
         public Task<ICollection<T>> GetAllAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public T Get(T Obj)
+        {
+            return _context.Set<T>().Find(Obj);
+        }
+
+        public virtual T Get(Func<T, bool> predicate)
+        {
+            return _context.Set<T>().FirstOrDefault(predicate);
         }
 
         public void Insert(T obj)

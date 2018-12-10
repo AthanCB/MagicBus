@@ -15,6 +15,7 @@ namespace MagicBus.DataAccess
             optionsBuilder.UseSqlServer(_connectionString);
         }
 
+        public DbSet<User> Users { get; set; }
         public DbSet<MagicTrip> MagicTrips { get; set; }
     }
 }

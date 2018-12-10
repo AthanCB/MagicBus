@@ -7,6 +7,7 @@ using MagicBus.Common.Models;
 using MagicBus.DataAccess.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using MagicBus.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MagicBus.Controllers
 {
@@ -23,6 +24,7 @@ namespace MagicBus.Controllers
             return View();
         }
 
+     
         [HttpPost]
         public IActionResult Index([FromForm]ViewMagicTrip obj)
         {
@@ -35,6 +37,7 @@ namespace MagicBus.Controllers
             return View();
         }
 
+       
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
