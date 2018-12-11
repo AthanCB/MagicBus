@@ -40,10 +40,8 @@ namespace MagicBus.Controllers
         }
 
         
-        public IActionResult About()
+        public IActionResult TripsView()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 

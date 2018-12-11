@@ -51,7 +51,7 @@ namespace MagicBus.Controllers
                 if (result.Succeeded)
                 {
                     //TODO: success
-                    return Ok();
+                    return RedirectToAction("Index","Home");
                 }
             }
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
